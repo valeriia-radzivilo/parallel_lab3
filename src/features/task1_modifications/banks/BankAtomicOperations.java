@@ -14,11 +14,13 @@ public class BankAtomicOperations extends ABank {
     }
 
     public void transfer(int from, int to, int amount) {
-        if (accounts.get(from) < amount) return;
-        accounts.addAndGet(from, -amount);
-        accounts.addAndGet(to, amount);
-        ntransacts.incrementAndGet();
-        if (ntransacts.get() % NTEST == 0) test();
+        synchronized (this) {
+            if (accounts.get(from) < amount) return;
+            accounts.addAndGet(from, -amount);
+            accounts.addAndGet(to, amount);
+            ntransacts.incrementAndGet();
+            if (ntransacts.get() % NTEST == 0) test();
+        }
     }
 
 
