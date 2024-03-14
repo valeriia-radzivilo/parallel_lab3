@@ -1,6 +1,6 @@
 package features.task2_modifications;
 
-public class Main {
+public class MainTask2 {
     public static void main(String[] args) {
         Drop drop = new Drop();
         (new Thread(new Producer(drop))).start();

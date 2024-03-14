@@ -9,9 +9,10 @@ public class MainGradeBook {
         GradeBook gradeBook = new GradeBook();
 
         ExecutorService executor = Executors.newFixedThreadPool(4); // 1 викладач + 3 асистенти
-        executor.execute(new Teacher(gradeBook, "Group1"));
-        executor.execute(new Teacher(gradeBook, "Group2"));
-        executor.execute(new Teacher(gradeBook, "Group3"));
+        executor.execute(new Teacher(gradeBook, "Teacher"));
+        executor.execute(new Teacher(gradeBook, "Assistant1"));
+        executor.execute(new Teacher(gradeBook, "Assistant2"));
+        executor.execute(new Teacher(gradeBook, "Assistant3"));
 
         executor.shutdown();
         try {
@@ -20,8 +21,8 @@ public class MainGradeBook {
             e.printStackTrace();
         }
 
-        System.out.println("Grades Group 1: " + gradeBook.getGradesForGroup("Group1"));
-        System.out.println("Grades Group 2: " + gradeBook.getGradesForGroup("Group2"));
-        System.out.println("Grades Group 3: " + gradeBook.getGradesForGroup("Group3"));
+        System.out.println("Grades Group 1: " + gradeBook.getGradesForGroup(1));
+        System.out.println("Grades Group 2: " + gradeBook.getGradesForGroup(2));
+        System.out.println("Grades Group 3: " + gradeBook.getGradesForGroup(3));
     }
 }

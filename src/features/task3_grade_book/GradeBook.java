@@ -6,18 +6,18 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class GradeBook {
-    private final ConcurrentHashMap<String, ConcurrentHashMap<String, Integer>> grades;
+    private final ConcurrentHashMap<Integer, ConcurrentHashMap<String, Integer>> grades;
     private final Set<String> gradedStudents;
 
     public GradeBook() {
         grades = new ConcurrentHashMap<>();
         gradedStudents = Collections.newSetFromMap(new ConcurrentHashMap<>());
-        grades.put("Group1", new ConcurrentHashMap<>());
-        grades.put("Group2", new ConcurrentHashMap<>());
-        grades.put("Group3", new ConcurrentHashMap<>());
+        grades.put(1, new ConcurrentHashMap<>());
+        grades.put(2, new ConcurrentHashMap<>());
+        grades.put(3, new ConcurrentHashMap<>());
     }
 
-    public synchronized boolean addGrade(String group, String studentId, int grade) {
+    public synchronized boolean addGrade(int group, String studentId, int grade) {
         if (!gradedStudents.contains(studentId)) {
             grades.get(group).put(studentId, grade);
             gradedStudents.add(studentId);
@@ -26,7 +26,7 @@ public class GradeBook {
         return false;
     }
 
-    public ConcurrentHashMap<String, Integer> getGradesForGroup(String group) {
+    public ConcurrentHashMap<String, Integer> getGradesForGroup(int group) {
         return grades.get(group);
     }
 }
