@@ -1,32 +1,33 @@
 package features.task3_grade_book;
 
-
-import java.util.Collections;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.Arrays;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class GradeBook {
-    private final ConcurrentHashMap<Integer, ConcurrentHashMap<String, Integer>> grades;
-    private final Set<String> gradedStudents;
+    private final int[][] grades;
+    private final Lock[][] locks;
 
-    public GradeBook() {
-        grades = new ConcurrentHashMap<>();
-        gradedStudents = Collections.newSetFromMap(new ConcurrentHashMap<>());
-        grades.put(1, new ConcurrentHashMap<>());
-        grades.put(2, new ConcurrentHashMap<>());
-        grades.put(3, new ConcurrentHashMap<>());
-    }
-
-    public synchronized boolean addGrade(int group, String studentId, int grade) {
-        if (!gradedStudents.contains(studentId)) {
-            grades.get(group).put(studentId, grade);
-            gradedStudents.add(studentId);
-            return true;
+    public GradeBook(int studentsPerGroup, int numGroups, int numTeachers) {
+        grades = new int[studentsPerGroup * numGroups][numTeachers];
+        locks = new ReentrantLock[studentsPerGroup * numGroups][numTeachers];
+        for (int i = 0; i < studentsPerGroup * numGroups; i++) {
+            for (int j = 0; j < numTeachers; j++) {
+                locks[i][j] = new ReentrantLock();
+            }
         }
-        return false;
     }
 
-    public ConcurrentHashMap<String, Integer> getGradesForGroup(int group) {
-        return grades.get(group);
+    public void putGrade(int studentId, int teacherId, int grade) {
+        locks[studentId][teacherId].lock();
+        try {
+            if (Arrays.stream(grades[studentId]).anyMatch(e -> e > 0)) {
+                return;
+            }
+            grades[studentId][teacherId] = grade;
+            System.out.println("Teacher " + (teacherId + 1) + " gave student " + studentId + " a grade of " + grade);
+        } finally {
+            locks[studentId][teacherId].unlock();
+        }
     }
 }

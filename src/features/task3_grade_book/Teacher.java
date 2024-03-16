@@ -3,36 +3,22 @@ package features.task3_grade_book;
 import java.util.Random;
 
 public class Teacher implements Runnable {
-    private final GradeBook gradeBook;
+    private final String name;
+    private final GradeBook journal;
+    private final Random random = new Random();
 
-    private final Random random;
-    private final String teacherName;
-
-    private final int STUDENTS_IN_GROUP = 40;
-
-    public Teacher(GradeBook gradeBook, String teacherName) {
-        this.gradeBook = gradeBook;
-        this.teacherName = teacherName;
-        this.random = new Random();
+    public Teacher(GradeBook journal, String name) {
+        this.name = name;
+        this.journal = journal;
     }
 
     @Override
     public void run() {
-
-        int numberOfStudentsToGrade = random.nextInt(STUDENTS_IN_GROUP / 4) + 5;
-
-        for (int i = 0; i < numberOfStudentsToGrade; i++) {
-
-            String studentId = "Student" + (random.nextInt(STUDENTS_IN_GROUP) + 1);
+        for (int i = 0; i < 10; i++) {
+            int studentId = random.nextInt(90) + 1;
             int grade = random.nextInt(100) + 1;
-            int group = random.nextInt(3) + 1;
-            boolean success = gradeBook.addGrade(group, studentId, grade);
-            if (!success) {
-                i--;
-            } else {
-                System.out.println("Student " + studentId + " grade " + grade + " teacher " + this.teacherName + " group " + group);
-            }
-
+            journal.putGrade(studentId, Integer.parseInt(name.split(" ")[1]) - 1, grade);
+         
         }
     }
 }

@@ -5,7 +5,7 @@ import java.util.Random;
 
 public class Producer implements Runnable {
     private final Drop drop;
-    int DATA_SIZE = 1000;
+    int DATA_SIZE = 100;
 
     public Producer(Drop drop) {
         this.drop = drop;
